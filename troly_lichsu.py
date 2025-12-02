@@ -49,3 +49,74 @@ if st.button("🔊 BẬT ÂM THANH (1 lần)"):
 # ======================
 cau_hoi = st.text_input("❓ Nhập câu hỏi lịch sử:")
 
+# ======================
+# 📜 HÀM GỌI GEMMA 9B
+# ======================
+def goi_ai_lich_su(text):
+    try:
+        res = requests.post(
+            "http://localhost:11434/api/generate",
+            json={
+                "model": "gemma:9b",
+                "prompt": (
+                    "Bạn là một trợ lý lịch sử Việt Nam. "
+                    "Hãy trả lời chính xác, ngắn gọn, dễ hiểu.\n\n"
+                    f"Câu hỏi: {text}\n"
+                    "Trả lời:"
+                )
+            }
+        )
+        return res.json().get("response", "❌ Không nhận được dữ liệu từ AI.")
+
+    except Exception:
+        return "❌ Lỗi khi gọi mô hình AI."
+
+# ======================
+# 🚀 NÚT TRẢ LỜI
+# ======================
+if st.button("📖 Trả lời"):
+   tra_loi = tra_loi_lich_su(cau_hoi)
+    st.success(tra_loi)
+   
+        # ======================
+        # 🔊 Tạo giọng nói
+        # ======================
+        try:
+            mp3_fp = BytesIO()
+            gTTS(text=tra_loi, lang="vi").write_to_fp(mp3_fp)
+            mp3_fp.seek(0)
+            audio_b64 = base64.b64encode(mp3_fp.read()).decode()
+
+        except:
+            st.error("Lỗi tạo giọng nói.")
+            audio_b64 = None
+
+        if audio_b64:
+            unlocked = "true" if st.session_state["audio_unlocked"] else "false"
+
+            audio_html = f"""
+            <div id="tts"></div>
+            <script>
+              (function(){{
+                const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+                const unlocked = {unlocked};
+                const audio = document.createElement('audio');
+                audio.src = "data:audio/mp3;base64,{audio_b64}";
+                audio.controls = true;
+                audio.playsInline = true;
+                document.getElementById("tts").appendChild(audio);
+
+                if (!isIOS && unlocked) {{
+                    audio.autoplay = true;
+                    audio.play().catch(()=>{{}});
+                }}
+              }})();
+            </script>
+            """
+
+            components.html(audio_html, height=120)
+
+            if st.session_state["audio_unlocked"]:
+                st.info("🔊 Đã tự động phát trên Android/PC.")
+            else:
+                st.warning("⚠️ iPhone phải bấm ▶ để nghe.")
