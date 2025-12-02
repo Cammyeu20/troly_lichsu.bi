@@ -76,7 +76,7 @@ def goi_ai_lich_su(text):
 # ======================
 if st.button("📖 Trả lời"):
    tra_loi = tra_loi_lich_su(cau_hoi)
-    st.success(tra_loi)
+   st.success(tra_loi)
    
         # ======================
         # 🔊 Tạo giọng nói
