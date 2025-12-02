@@ -47,4 +47,5 @@ if st.button("🔊 BẬT ÂM THANH (1 lần)"):
 # ======================
 # 📜 Ô nhập câu hỏi
 # ======================
-cau_hoi = st.text_
+cau_hoi = st.text_input("❓ Nhập câu hỏi lịch sử:")
+
