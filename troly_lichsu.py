@@ -67,8 +67,8 @@ if st.button("Gửi"):
                         "Hãy trả lời chính xác, rõ ràng và dễ hiểu.\n\n"
                        f"Câu hỏi: {cau_hoi}"
 
-                }
-            )
+                )
+            {
 
             result = response.json()["response"]
             st.write("### 🧠 AI trả lời:")
