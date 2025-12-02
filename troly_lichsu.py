@@ -46,29 +46,34 @@ if st.button("🔊 BẬT ÂM THANH (1 lần)"):
 # ======================
 # 📜 Tích hợp AI
 # ======================
-def tra_loi_lich_su(cau_hoi: str):
-    if not cau_hoi:
-        return "Vui lòng nhập câu hỏi."
+st.set_page_config(page_title="Ollama Chatbot", page_icon="🤖")
 
-    try:
-        response = requests.post(
-            "http://localhost:11434/api/generate",
-            json={
-                "model": "llama3",
-                "prompt": (
-                    "Bạn là một trợ lý lịch sử Việt Nam. "
-                    "Hãy trả lời chính xác, rõ ràng và dễ hiểu.\n\n"
-                    f"Câu hỏi: {cau_hoi}"
-                ),
-                "stream": False
-            }
-        )
+st.title("🤖 Chatbot miễn phí dùng Ollama (LLaMA 3)")
 
-        data = response.json()
-        return data.get("response", "Không nhận được phản hồi từ AI.")
+prompt = st.text_area("Nhập câu hỏi:", height=150)
 
-    except Exception as e:
-        return f"Lỗi khi kết nối AI: {e}"
+if st.button("Gửi"):
+    if not prompt.strip():
+        st.error("Bạn chưa nhập nội dung!")
+    else:
+        with st.spinner("AI đang nghĩ..."):
+            response = requests.post(
+                "http://localhost:11434/api/generate",
+                json={
+                    "model": "llama3",
+                    "prompt": (
+
+                        "Bạn là một trợ lý lịch sử Việt Nam. "
+                        "Hãy trả lời chính xác, rõ ràng và dễ hiểu.\n\n"
+                       f"Câu hỏi: {cau_hoi}"
+
+                }
+            )
+
+            result = response.json()["response"]
+            st.write("### 🧠 AI trả lời:")
+            st.write(result)
+
 # ======================
 # 💬 GIAO DIỆN
 # ======================
