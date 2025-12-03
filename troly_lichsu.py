@@ -55,7 +55,8 @@ cau_hoi = st.text_input("❓ Nhập câu hỏi lịch sử:")
 def goi_ai_lich_su(text):
     try:
         res = requests.post(
-            "http://localhost:11434/api/generate",
+            "https://your-ollama-app.up.railway.app/api/generate",
+
             json={
                 "model": "gemma:9b",
                 "prompt": (
